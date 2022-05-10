@@ -1,0 +1,24 @@
+
+### Create new photos
+POST http://localhost:3000/restaurants
+Content-Type: application/json
+
+{
+    "email": "user@example.com",
+    "name": "olamide restaurant",
+    "phoneNumber": "2349074721412",
+    "description": "this is a description",
+    "category": "cafe",
+    "address": "tanke"
+}
+
+
+### Get all restaurants
+GET http://localhost:3000/restaurants
+
+### Find restaurant by ID
+GET http://localhost:3000/restaurants/1
+
+### Find restaurant profile
+GET http://localhost:3000/restaurants/me
+
