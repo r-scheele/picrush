@@ -1,38 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Optional } from '@nestjs/common';
+import { User } from 'src/user/user.entity';
 
-export enum Category {
-  FAST_FOOD = 'fast food',
-  CAFE = 'cafe',
-  FINE_DINNING = 'fine dinning',
-}
+
 
 @Entity()
 export class Photo {
   @PrimaryGeneratedColumn()
   id: string;
 
-  @Column()
-  name: string;
-
-  @Column()
-  description: string;
-
-  @Column()
-  email: string;
-
-  @Optional()
-  @Column()
-  phoneNumber: string;
-
-  @Optional()
-  @Column()
-  category: Category;
-
-  @Optional()
-  @Column()
-  address: string;
-
-  // @Column()
-  // images?: object[];
+ 
+  @ManyToOne(() => User, user => user.photos, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    nullable: false,
+  }) user: User; 
 }

@@ -13,7 +13,7 @@ import {
 import { AuthGuard } from 'src/guards/auth.guard';
 import { PhotosService } from './photos.service';
 import { Photo } from './photos.entity';
-import { createPhotoDto as createPhotoDto } from './dtos/create-restaurants.dto';
+import { createPhotoDto as createPhotoDto } from './dtos/create-photos.dto';
 import { updatePhotoDto } from './dtos/update-photos.dto';
 import { CurrentUser } from 'src/user/decorators/current-user.decorator';
 import { User } from 'src/user/user.entity';

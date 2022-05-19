@@ -66,9 +66,9 @@ export class UserController {
   }
 
   @Get()
-  findAllUser(@Query('email') email: string) {
-    const users = this.userService.find(email);
-    return users;
+  findAllUsers() {
+    return this.userService.find(null);
+  
   }
 
   @Patch(':id')

@@ -3,8 +3,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Photo } from './photos.entity';
 import { Repository } from 'typeorm';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
-import { Category } from './photos.entity';
-
 @Injectable()
 export class PhotosService {
   constructor(@InjectRepository(Photo) private repo: Repository<Photo>) {}
@@ -25,8 +23,7 @@ export class PhotosService {
   }
 
   find() {
-    // use geolocation to find all the restaurants close by to this address
-
+    
     const photos = this.repo.find({});
     return photos;
   }
@@ -40,9 +37,9 @@ export class PhotosService {
   }
 
   async remove(id: number) {
-    const restaurant = await this.findOne(id);
-    if (!restaurant) throw new NotFoundException('User not found!');
+    const photo = await this.findOne(id);
+    if (!photo) throw new NotFoundException('User not found!');
 
-    return this.repo.remove(restaurant);
+    return this.repo.remove(photo);
   }
 }

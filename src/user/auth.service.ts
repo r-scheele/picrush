@@ -15,8 +15,9 @@ export class AuthService {
     if (users.length) {
       throw new BadRequestException('Email in use');
     }
-    const salt = await genSalt(10);
-    const hashed = await hash(password, salt);
+
+
+    const hashed = await this.hash_password(password);
     return await this.userService.create(email, hashed);
   }
 
@@ -27,5 +28,10 @@ export class AuthService {
     const isMatch = await compare(password, user.password);
     if (!isMatch) throw new BadRequestException('Invalid credentials');
     return user;
+  }
+  async hash_password(password:string) {
+    const salt = await genSalt(10);
+    const hashed = await hash(password, salt);
+    return hashed;
   }
 }

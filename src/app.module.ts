@@ -7,8 +7,10 @@ import { User } from './user/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import { PhotosModule } from './photos/photos.module';
 import { Photo } from './photos/photos.entity';
-import { ChildProcess } from 'child_process';
 
+
+
+console.log(process.env.DB_URI)
 @Module({
   imports: [
     ConfigModule.forRoot({
