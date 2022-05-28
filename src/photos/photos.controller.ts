@@ -4,15 +4,17 @@ import {
   Post,
   UseGuards,
   Body,
-  Session,
   Param,
   Query,
   Patch,
   Delete,
+  UseInterceptors,
+  UploadedFile,
+
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { PhotosService } from './photos.service';
-import { Photo } from './photos.entity';
 import { createPhotoDto as createPhotoDto } from './dtos/create-photos.dto';
 import { updatePhotoDto } from './dtos/update-photos.dto';
 import { CurrentUser } from 'src/user/decorators/current-user.decorator';
@@ -20,38 +22,34 @@ import { User } from 'src/user/user.entity';
 
 @Controller('photos')
 export class PhotosController {
-  constructor(private PhotosService: PhotosService) {}
+  constructor(private photosService: PhotosService) {}
 
-  @Post()
-  async createRestaurant(@Body() body: createPhotoDto) {
-    const {} = body;
-    const photo = await this.PhotosService.create();
-    return photo;
-  }
-
-  @Get('me')
-  getCurrentUser(@CurrentUser() user: User) {
-    return user;
+  @Post('new')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('image'))
+  async createNewPhoto(@Body() photo: createPhotoDto, @CurrentUser() user: User, @UploadedFile() file: Express.Multer.File) {
+    return this.photosService.create(photo, user, file);
   }
 
   @Get(':id')
-  findUser(@Param('id') id: number) {
-    return this.PhotosService.findOne(id);
+  findPhoto(@Param('id') id: number) {
+    return this.photosService.findOne(id);
   }
 
   @Get()
   findAllRestaurants(@Query('address') address: string) {
-    const restaurants = this.PhotosService.find();
+    const restaurants = this.photosService.find();
     return restaurants;
   }
 
   @Patch(':id')
   updateUser(@Body() body: updatePhotoDto, @Param('id') id: number) {
-    return this.PhotosService.update(id, body);
+    return this.photosService.update(id, body);
   }
 
   @Delete(':id')
   deleteUser(@Param('id') id: number) {
-    return this.PhotosService.remove(id);
+    return this.photosService.remove(id);
   }
+
 }

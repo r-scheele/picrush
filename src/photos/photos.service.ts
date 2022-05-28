@@ -3,17 +3,28 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Photo } from './photos.entity';
 import { Repository } from 'typeorm';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
+import { createPhotoDto } from './dtos/create-photos.dto';
+import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary';
+import toStream = require('buffer-to-stream');
+
+import { User } from 'src/user/user.entity';
+
+
 @Injectable()
 export class PhotosService {
   constructor(@InjectRepository(Photo) private repo: Repository<Photo>) {}
 
-  async create() {
-    const photos = await this.find();
+  async create(photo: createPhotoDto, user: User, file: Express.Multer.File) {
+    const photos = await this.repo.find({name: photo.name});
     if (photos.length) {
-      throw new BadRequestException(`Restaurant with this email already exist`);
+      throw new BadRequestException(`Photo with this name already exist`);
     }
-    const photo = this.repo.create({});
-    return this.repo.save(photo);
+
+    const {url} = await this.uploadImageToCloudinary(file);
+    const newPhoto = this.repo.create(photo);
+    newPhoto.user = user;
+    newPhoto.imageUrl = url;
+    return this.repo.save(newPhoto);
   }
 
   findOne(id: number) {
@@ -41,5 +52,29 @@ export class PhotosService {
     if (!photo) throw new NotFoundException('User not found!');
 
     return this.repo.remove(photo);
+  }
+
+
+
+
+  async uploadImageToCloudinary(file: Express.Multer.File) {
+    const res = await this.uploadImage(file).catch(() => {
+      throw new BadRequestException('Invalid file type.');
+    });
+
+
+    return res;
+  }
+
+  async uploadImage(
+    file: Express.Multer.File,
+  ): Promise<UploadApiResponse | UploadApiErrorResponse> {
+    return new Promise((resolve, reject) => {
+      const upload = v2.uploader.upload_stream((error, result) => {
+        if (error) return reject(error);
+        resolve(result);
+      });
+      toStream(file.buffer).pipe(upload);
+    });
   }
 }
