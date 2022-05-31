@@ -28,7 +28,7 @@ export class PhotosService {
   }
 
   findOne(id: number) {
-    if (!id) throw new NotFoundException('Restaurant not found');
+    if (!id) throw new NotFoundException('Photo not found');
     const photo = this.repo.findOne(id);
     return photo;
   }

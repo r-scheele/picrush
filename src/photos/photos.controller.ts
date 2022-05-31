@@ -1,3 +1,4 @@
+import { LikesService } from './like.service';
 import {
   Controller,
   Get,
@@ -22,7 +23,7 @@ import { User } from 'src/user/user.entity';
 
 @Controller('photos')
 export class PhotosController {
-  constructor(private photosService: PhotosService) {}
+  constructor(private photosService: PhotosService, private likeService: LikesService) {}
 
   @Post('new')
   @UseGuards(AuthGuard)
@@ -50,6 +51,16 @@ export class PhotosController {
   @Delete(':id')
   deleteUser(@Param('id') id: number) {
     return this.photosService.remove(id);
+  }
+
+  @Post(':photoId/react')
+  likePhoto(@Param('photoId') photoId: number, @CurrentUser() user: User) {
+    return this.likeService.likePhoto(photoId, user);
+  }
+
+  @Delete(':photoId/react')
+  unlikePhoto(@Param('photoId') photoId: number, @CurrentUser() user: User) {
+    return this.likeService.unlikePhoto(photoId, user);
   }
 
 }
