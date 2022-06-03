@@ -28,7 +28,7 @@ export class PhotosService {
   }
 
   findOne(id: number) {
-    if (!id) throw new NotFoundException('Photo not found');
+    if (!id) throw new NotFoundException('Please provide a valid id');
     const photo = this.repo.findOne(id);
     return photo;
   }
@@ -49,8 +49,7 @@ export class PhotosService {
 
   async remove(id: number) {
     const photo = await this.findOne(id);
-    if (!photo) throw new NotFoundException('User not found!');
-
+    if (!photo) throw new NotFoundException('Photo with this id not found');
     return this.repo.remove(photo);
   }
 

@@ -1,4 +1,4 @@
-import { PhotosService } from './photos.service';
+import { PhotosService } from '../photos/photos.service';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -19,14 +19,15 @@ export class LikesService {
     }
 
     const like = await this.repo.findOne({ where: { photo,  user} });
-  
     if (like) {
       throw new BadRequestException('You have already liked this photo');
     }
 
     const newLike = this.repo.create({photo, user});
     await this.repo.save(newLike);
-    return {msg: 'You have successfully liked this photo'};
+
+    let likes = await (await this.photoService.findOne(photoId)).likes.length;
+    return {msg: 'You have successfully liked this photo', likes: likes};
   }
 
  
@@ -42,7 +43,9 @@ export class LikesService {
       throw new BadRequestException('You have not liked this photo');
     }
     await this.repo.remove(like);
-    return {msg: 'You have successfully unliked this photo'};
+
+    let likes = await (await this.photoService.findOne(photoId)).likes.length;
+    return {msg: 'You have successfully unliked this photo', likes: likes};
   }
   }
 

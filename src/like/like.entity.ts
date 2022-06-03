@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Optional, Post } from '@nestjs/common';
 import { User } from 'src/user/user.entity';
-import { Photo } from './photos.entity';
+import { Photo } from '../photos/photos.entity';
 
 
 

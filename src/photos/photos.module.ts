@@ -4,13 +4,13 @@ import { PhotosController } from './photos.controller';
 import { Photo } from './photos.entity';
 import { PhotosService } from './photos.service';
 import { CloudinaryProvider } from './cloudinary.provider';
-import { Like } from './like.entity';
-import { LikesService } from './like.service';
+import { LikesService } from '../like/like.service';
+import { Like } from 'src/like/like.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Photo, Like])],
   controllers: [PhotosController],
   providers: [PhotosService, CloudinaryProvider, LikesService],
-  exports: [PhotosService, PhotosService],
+  exports: [PhotosService],
 })
 export class PhotosModule {}

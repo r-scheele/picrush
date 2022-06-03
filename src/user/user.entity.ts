@@ -1,4 +1,4 @@
-import { Like } from 'src/photos/like.entity';
+import { Like } from 'src/like/like.entity';
 import { Photo } from 'src/photos/photos.entity';
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
@@ -13,6 +13,11 @@ export class User {
   @Column()
   password: string;
 
+  @Column("int", { array: true, default: {} })
+  followers: Number[];
+
+  @Column("int", { array: true, default: {} })
+  followings: Number[];
 
   @CreateDateColumn()
   createdAt: Date;

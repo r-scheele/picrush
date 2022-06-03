@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, OneToMany, AfterLoad } from 'typeorm';
 import { Optional } from '@nestjs/common';
 import { User } from 'src/user/user.entity';
-import { Like } from './like.entity';
+import { Like } from '../like/like.entity';
 
 
 
@@ -13,8 +13,6 @@ export class Photo {
   @Column()
   name: string;
 
-  @Column({default: 0})
-  numberOfLikes: number;
 
   @Column({default: 0})
   viewCount: number;
@@ -37,10 +35,7 @@ export class Photo {
   @Column()
   location: string;
  
- @AfterLoad()
-  async loadLikes() {
-    this.numberOfLikes = this.likes.length
-  }
+
 
 
   @CreateDateColumn({ type: 'timestamptz' })

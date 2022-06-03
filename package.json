@@ -29,6 +29,7 @@
     "@nestjsi/typeorm-pg": "^0.2.3",
     "@types/bcrypt": "^5.0.0",
     "@types/cookie-session": "^2.0.44",
+    "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "buffer-to-stream": "^1.0.0",
     "class-transformer": "^0.5.1",
