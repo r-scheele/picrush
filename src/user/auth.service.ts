@@ -1,14 +1,17 @@
 import {
   BadRequestException,
+  CACHE_MANAGER,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { genSalt, hash, compare } from 'bcrypt';
+import { Cache } from 'cache-manager';
 import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, @Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   async signup(email: string, password: string) {
     const users = await this.userService.find(email);
@@ -27,6 +30,7 @@ export class AuthService {
 
     const isMatch = await compare(password, user.password);
     if (!isMatch) throw new BadRequestException('Invalid credentials');
+    await this.cacheManager.set(user.id.toString(), user);
     return user;
   }
   async hash_password(password:string) {

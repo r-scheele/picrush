@@ -1,5 +1,8 @@
+import { ScheduleModule } from '@nestjs/schedule';
+
+
 import { Like } from 'src/like/like.entity';
-import { Module } from '@nestjs/common';
+import { Module, CacheModule} from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -8,17 +11,12 @@ import { User } from './user/user.entity';
 import { ConfigModule } from '@nestjs/config';
 import { PhotosModule } from './photos/photos.module';
 import { Photo } from './photos/photos.entity';
-import { SocialsService } from './socials/socials.service';
-import { SocialsController } from './socials/socials.controller';
 import { SocialsModule } from './socials/socials.module';
 import { LikeModule } from './like/like.module';
-import { LikesController } from './like/like.controller';
-import { UserService } from './user/user.service';
-import { UserController } from './user/user.controller';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CurrentUserInterceptor } from './user/interceptors/current-user.interceptor';
 
 
-
-console.log(process.env.DB_URI)
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -37,6 +35,7 @@ console.log(process.env.DB_URI)
       },
       autoLoadEntities: true,
     }),
+    ScheduleModule.forRoot(),
     UserModule,
     SocialsModule,
     PhotosModule,

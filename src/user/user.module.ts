@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthService } from './auth.service';
@@ -8,15 +8,14 @@ import { User } from './user.entity';
 import { UserService } from './user.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [CacheModule.register({
+    ttl: 5, // seconds
+    max: 10, // maximum number of items in cache
+  }),TypeOrmModule.forFeature([User])],
   controllers: [UserController],
   providers: [
     UserService,
-    AuthService,
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CurrentUserInterceptor,
-    },
+    AuthService
   ],
   exports: [UserService]
 })

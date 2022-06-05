@@ -38,9 +38,9 @@ export class PhotosController {
   }
 
   @Get()
-  findAllPhotos(@Query('address') address: string) {
-    const restaurants = this.photosService.find();
-    return restaurants;
+  findAllPhotos(@CurrentUser() user: User) {
+    const photos = this.photosService.findAllPhotoByUser(user);
+    return photos;
   }
 
   @Patch(':id')

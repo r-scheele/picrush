@@ -14,10 +14,10 @@ export class User {
   password: string;
 
   @Column("int", { array: true, default: {} })
-  followers: Number[];
+  followers: number[];
 
   @Column("int", { array: true, default: {} })
-  followings: Number[];
+  followings: number[];
 
   @CreateDateColumn()
   createdAt: Date;

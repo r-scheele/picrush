@@ -33,9 +33,12 @@ export class PhotosService {
     return photo;
   }
 
-  find() {
-    
-    const photos = this.repo.find({});
+  findAllPhotoByUser(user: User) {
+    const photos = this.repo.find({
+      where: {
+        user,
+      }
+    });
     return photos;
   }
 

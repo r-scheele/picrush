@@ -32,4 +32,9 @@ export class SocialsController {
     async followings(@Param('userId') userId: number, @CurrentUser() user: User) {
         return this.socialsService.followings(userId, user);
     }
+
+    @Get('feeds')
+    async feeds(@CurrentUser() user: User) {
+        return this.socialsService.feeds(user);
+    }
 }
